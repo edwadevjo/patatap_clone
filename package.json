@@ -1,0 +1,14 @@
+{
+  "name": "patatap",
+  "version": "1.0.0",
+  "description": "",
+  "main": "sever.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Edward Jo",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.4"
+  }
+}
