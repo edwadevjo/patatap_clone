@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html>
     <head>
-    <title>Patatap Demo</title>
+    <title>Patatap Clone</title>
+    <link rel="icon" type="image/png" href="images/smile.png">
     <link rel="stylesheet" type="text/css" href="css/circles.css">
     <link rel="stylesheet" type="text/css" href="css/sweetalert.css">
     <script type="text/javascript" src="paper-full.js"></script>
+    <script src="sweetalert.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.4/howler.js"></script>
     <script type="text/paperscript" canvas="myCanvas">
+
+    swal({
+      title: "Sweet!",
+      text: "You can play with the keyboard" + "\n\n" +
+            "keys: q, w, e, r, t, y, u, i, o, p," + "\n"+ "a, s, d, f, g, h, j, k, l, z , x, c, v, b, n, m.",
+            imageUrl: "/images/smile.png"
+        });
 
     var keyData = {
        q: {
@@ -167,26 +176,43 @@
           }
       }
     
-       var circles = [];
+       var shapes = [];
     
-       function onKeyDown(event) {
-          if(keyData[event.key]){
-             var maxPoint = new Point(view.size.width, view.size.height);
-             var randomPoint = Point.random();
-             var point = maxPoint * randomPoint;
-             var newCircle = new Path.Circle(point, 500);
-             newCircle.fillColor = keyData[event.key].color;
-             keyData[event.key].sound.play();
-             circles.push(newCircle);
-          }
-       }
-    
-       function onFrame(event){
-          for(var i = 0; i < circles.length; i++){
-             circles[i].fillColor.hue += 1;
-             circles[i].scale(.9);
-          } 
-       }
+   		function onKeyDown(event) {
+		if(keyData[event.key])
+		{
+			// shapes 
+			var maxPoint = new Point(view.size.width, view.size.height);
+			var randomPoint = Point.random(); 
+			var point = maxPoint * randomPoint;
+			var newShape =  new Path.RegularPolygon(point, 
+			    (Math.floor((Math.random() * 10) + 1)), 500);
+			newShape.fillColor = keyData[event.key].color;
+			keyData[event.key].sound.play();
+			shapes.push(newShape);
+			// canvas 
+			var canvasColor = returnOpposite((keyData[event.key].color).substring(1));
+			document.getElementById("myCanvas").style.background = "#" + canvasColor;
+			}
+		}
+		function decimalToHex(decimal) {
+		  var hex = decimal.toString(16);
+		  if (hex.length == 1) hex = '0' + hex;
+		  return hex;
+		}
+		function hexToDecimal(hex) {return parseInt(hex,16);}
+		 
+		function returnOpposite(colour) {
+		  return decimalToHex(255 - hexToDecimal(colour.substr(0,2))) 
+		    + decimalToHex(255 - hexToDecimal(colour.substr(2,2))) 
+		    + decimalToHex(255 -  hexToDecimal(colour.substr(4,2)));
+		}
+		function onFrame(event) {
+			for(var i = 0; i < shapes.length; i++){
+				shapes[i].fillColor.hue += 1;
+				shapes[i].scale(.9);
+			}			
+		}
       </script>
     </head>
     <body>
